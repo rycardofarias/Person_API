@@ -95,7 +95,7 @@ public class PersonController {
 			@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
 			}
 	)
-	public PersonVO creat( @RequestBody PersonVO person){
+	public PersonVO create( @RequestBody PersonVO person){
 		return service.create(person);
 	}
 	
