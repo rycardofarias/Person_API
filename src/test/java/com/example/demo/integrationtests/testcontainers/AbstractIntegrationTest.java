@@ -12,6 +12,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.lifecycle.Startables;
 
 import com.example.demo.startup;
+import com.example.integrationtests.swagger.SwaggerIntegrationTest;
 
 @ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class, classes = startup.class)
 public class AbstractIntegrationTest {

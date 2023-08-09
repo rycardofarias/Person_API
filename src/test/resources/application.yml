@@ -1,7 +1,7 @@
 server:
   port: 8888
 cors:
-  originPatterns: http://localhost:3000,http://localhost:8080,http://x.com.br 
+  originPatterns: http://localhost:3000,http://localhost:8080,https://x.com.br 
 spring:
   datasource:
       driverClassName: org.postgresql.Driver
