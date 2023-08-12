@@ -43,7 +43,7 @@ public class JwtTokenProvider {
 		algorithm = Algorithm.HMAC256(secretKey.getBytes());
 	}
 
-	public TokenVO createAcessToken(String username, List<String> roles) {
+	public TokenVO createAccessToken(String username, List<String> roles) {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validityInMilliseconds);
 		var acessToken = getAccessToken(username, roles, now, validity);

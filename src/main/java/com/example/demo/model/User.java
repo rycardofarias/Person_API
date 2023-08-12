@@ -57,7 +57,7 @@ private static final long serialVersionUID = 1L;
 		
 	}
 	
-	private List<String> getRoles(){
+	public List<String> getRoles(){
 		List<String> roles = new ArrayList<>();
 		
 		for(Permission permission : permissions) {
