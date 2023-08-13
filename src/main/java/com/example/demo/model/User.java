@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,35 +18,38 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
-public class User implements UserDetails, Serializable{
-private static final long serialVersionUID = 1L;
-	
+@Entity
+@Table(name = "users")
+public class User implements UserDetails, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@Column(name = "user_name", unique = true)
 	private String userName;
-
+	
 	@Column(name = "full_name")
 	private String fullName;
-
+	
 	@Column(name = "password")
 	private String password;
-
+	
 	@Column(name = "account_non_expired")
 	private Boolean accountNonExpired;
 	
 	@Column(name = "account_non_locked")
 	private Boolean accountNonLocked;
 	
-	
 	@Column(name = "credentials_non_expired")
 	private Boolean credentialsNonExpired;
 	
-	@Column(name = "enable")
-	private Boolean enable;
+	@Column(name = "enabled")
+	private Boolean enabled;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_permission", joinColumns = {@JoinColumn (name = "id_user")},
@@ -53,19 +57,16 @@ private static final long serialVersionUID = 1L;
 	)
 	private List<Permission> permissions;
 	
-	public User() {
-		
-	}
-	
-	public List<String> getRoles(){
+	public User() {}
+
+	public List<String> getRoles() {
 		List<String> roles = new ArrayList<>();
-		
-		for(Permission permission : permissions) {
+		for (Permission permission : permissions) {
 			roles.add(permission.getDescription());
 		}
 		return roles;
 	}
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.permissions;
@@ -98,7 +99,7 @@ private static final long serialVersionUID = 1L;
 
 	@Override
 	public boolean isEnabled() {
-		return this.enable;
+		return this.enabled;
 	}
 
 	public Long getId() {
@@ -149,12 +150,12 @@ private static final long serialVersionUID = 1L;
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public Boolean getEnable() {
-		return enable;
+	public Boolean getEnabled() {
+		return enabled;
 	}
 
-	public void setEnable(Boolean enable) {
-		this.enable = enable;
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public List<Permission> getPermissions() {
@@ -171,7 +172,7 @@ private static final long serialVersionUID = 1L;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(accountNonExpired, accountNonLocked, credentialsNonExpired, enable, fullName, id, password,
+		return Objects.hash(accountNonExpired, accountNonLocked, credentialsNonExpired, enabled, fullName, id, password,
 				permissions, userName);
 	}
 
@@ -187,10 +188,10 @@ private static final long serialVersionUID = 1L;
 		return Objects.equals(accountNonExpired, other.accountNonExpired)
 				&& Objects.equals(accountNonLocked, other.accountNonLocked)
 				&& Objects.equals(credentialsNonExpired, other.credentialsNonExpired)
-				&& Objects.equals(enable, other.enable) && Objects.equals(fullName, other.fullName)
+				&& Objects.equals(enabled, other.enabled) && Objects.equals(fullName, other.fullName)
 				&& Objects.equals(id, other.id) && Objects.equals(password, other.password)
 				&& Objects.equals(permissions, other.permissions) && Objects.equals(userName, other.userName);
 	}
-	
+
 	
 }
