@@ -91,11 +91,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 		    <groupId>org.testcontainers</groupId>
 		    <artifactId>postgresql</artifactId>
 		    <scope>test</scope>
@@ -110,11 +105,15 @@
 	        </plugin>
 	        <plugin>
 	            <groupId>org.flywaydb</groupId>
-	            <artifactId>flyway-maven-plugin</artifactId>
+    			<artifactId>flyway-maven-plugin</artifactId>
 	            <configuration>
 			      	<url>jdbc:postgresql://localhost:5432/person-api?useTimezone=true&amp;serverTimezone=UTC&amp;useSSL=false</url>
 	                <user>postgres</user>
 	                <password>banco321</password>
+	                <schemas>public</schemas>
+	                <locations>
+			            <location>filesystem:src/main/resources/db/migration</location>
+			        </locations>
 	            </configuration>
 	            <dependencies>
 	                <dependency>
