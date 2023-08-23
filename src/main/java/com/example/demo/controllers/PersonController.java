@@ -178,4 +178,38 @@ public class PersonController {
 	public PersonVO disablePerson( @PathVariable(value = "id") Long id){
 		return service.disablePerson(id);
 	}
+	
+	@GetMapping(value = "/findPersonsByName/{firstName}",
+			produces = {MediaType.APPLICATION_JSON_VALUE, 
+			MediaType.APPLICATION_XML_VALUE})
+	@Operation(summary = "Find People by name", 
+		description = "Find People by name",
+		tags = {"People"}, 
+		responses = {
+			@ApiResponse(description = "Sucess", responseCode = "200", 
+					content = {
+							@Content(mediaType = "application/json", 
+									array = @ArraySchema(
+											schema = @Schema(
+													implementation = PersonVO.class)))}),
+			@ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+			@ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+			@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+			@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+			}
+	)
+	public ResponseEntity<PagedModel<EntityModel<PersonVO>>> findPersonsByName(
+			@PathVariable(value = "firstName") String firstName,
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "size", defaultValue = "12") Integer size,
+			@RequestParam(value = "limit", defaultValue = "12") String direction
+			) {
+		
+		var sortDirection = "desc".contentEquals(direction)
+				? Direction.DESC : Direction.ASC;
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+		return ResponseEntity.ok(service.findPersonsByName(firstName, pageable));
+
+	}
 }
