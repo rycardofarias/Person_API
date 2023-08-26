@@ -179,7 +179,7 @@ public class PersonController {
 		return service.disablePerson(id);
 	}
 	
-	@GetMapping(value = "/findPersonsByName/{firstName}",
+	@GetMapping(value = "/findPersonByName/{firstName}",
 			produces = {MediaType.APPLICATION_JSON_VALUE, 
 			MediaType.APPLICATION_XML_VALUE})
 	@Operation(summary = "Find People by name", 
@@ -198,7 +198,7 @@ public class PersonController {
 			@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
 			}
 	)
-	public ResponseEntity<PagedModel<EntityModel<PersonVO>>> findPersonsByName(
+	public ResponseEntity<PagedModel<EntityModel<PersonVO>>> findPersonByName(
 			@PathVariable(value = "firstName") String firstName,
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "12") Integer size,
@@ -209,7 +209,7 @@ public class PersonController {
 				? Direction.DESC : Direction.ASC;
 		
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
-		return ResponseEntity.ok(service.findPersonsByName(firstName, pageable));
+		return ResponseEntity.ok(service.findPersonByName(firstName, pageable));
 
 	}
 }
