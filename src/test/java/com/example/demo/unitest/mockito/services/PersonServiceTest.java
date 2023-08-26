@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,14 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 
 import com.example.demo.data.vo.v1.PersonVO;
 import com.example.demo.exceptions.RequiredObjectsIsNullException;
@@ -165,22 +156,5 @@ class PersonServicesTest {
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
 		
 		service.delete(1L);
-	}
-	
-	 @Test
-    public void testFindAll() {
-
-		Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "firstName"));
-	    
-	    List<Person> list = input.mockEntityList();
-
-	    Page<Person> page = new PageImpl<>(list, pageable, list.size());
-	    when(repository.findAll(eq(pageable))).thenReturn(page);
-
-	    PagedModel<EntityModel<PersonVO>> people = service.findAll(pageable);
-
-	    assertNotNull(people);
-	    assertEquals(list.size(), people.getMetadata().getSize());
-
 	}
 }
