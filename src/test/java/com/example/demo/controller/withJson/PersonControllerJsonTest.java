@@ -57,6 +57,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 				.basePath("/auth/signin")
 					.port(TestConfigs.SERVER_PORT)
 					.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.accept(TestConfigs.CONTENT_TYPE_JSON)
 				.body(user)
 					.when()
 				.post()
@@ -83,6 +84,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		person.setId(3L);
 		var content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.accept(TestConfigs.CONTENT_TYPE_JSON)
 					.body(person)
 					.when()
 					.post()
@@ -119,6 +121,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		
 		var content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.accept(TestConfigs.CONTENT_TYPE_JSON)
 					.body(person)
 					.when()
 					.post()
@@ -155,6 +158,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 			
 		var content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.accept(TestConfigs.CONTENT_TYPE_JSON)
 					.pathParam("id", person.getId())
 					.when()
 					.patch("{id}")
@@ -191,6 +195,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 			
 		var content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.accept(TestConfigs.CONTENT_TYPE_JSON)
 					.pathParam("id", person.getId())
 					.when()
 					.get("{id}")
@@ -226,6 +231,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 		given().spec(specification)
 			.contentType(TestConfigs.CONTENT_TYPE_JSON)
+			.accept(TestConfigs.CONTENT_TYPE_JSON)
 				.pathParam("id", person.getId())
 				.when()
 				.delete("{id}")
@@ -239,6 +245,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		
 		var content = given().spec(specification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.accept(TestConfigs.CONTENT_TYPE_JSON)
 				.queryParams("page", 3, "size", 19, "direction", "asc")	
 					.when()
 					.get()
@@ -340,6 +347,35 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		assertEquals("De Minico", foundPersonOne.getLastName());
 		assertEquals("0 Anzinger Hill", foundPersonOne.getAddress());
 		assertEquals("Male", foundPersonOne.getGender());
+	}
+	
+	@Test
+	@Order(9)
+	public void testHATEOAS() throws JsonMappingException, JsonProcessingException {
+		
+		var content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.accept(TestConfigs.CONTENT_TYPE_JSON)
+				.queryParams("page", 3, "size", 19, "direction", "asc")
+					.when()
+					.get()
+				.then()
+					.statusCode(200)
+						.extract()
+						.body()
+							.asString();
+		
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/person/v1/337\"}}}"));
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/person/v1/129\"}}}"));
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/person/v1/463\"}}}"));
+		
+		assertTrue(content.contains("{\"first\":{\"href\":\"http://localhost:8888/api/person/v1?direction=asc&page=0&size=19&sort=firstName,asc\"}"));
+		assertTrue(content.contains("\"prev\":{\"href\":\"http://localhost:8888/api/person/v1?direction=asc&page=2&size=19&sort=firstName,asc\"}"));
+		assertTrue(content.contains("\"self\":{\"href\":\"http://localhost:8888/api/person/v1?page=3&size=19&direction=asc\"}"));
+		assertTrue(content.contains("\"next\":{\"href\":\"http://localhost:8888/api/person/v1?direction=asc&page=4&size=19&sort=firstName,asc\"}"));
+		assertTrue(content.contains("\"last\":{\"href\":\"http://localhost:8888/api/person/v1?direction=asc&page=52&size=19&sort=firstName,asc\"}}"));
+		
+		assertTrue(content.contains("\"page\":{\"size\":19,\"totalElements\":999,\"totalPages\":53,\"number\":3}}"));
 	}
 	
 	private void mockPerson() {
