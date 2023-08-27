@@ -60,7 +60,7 @@ public class PersonController {
 	public ResponseEntity<PagedModel<EntityModel<PersonVO>>> findAll(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "12") Integer size,
-			@RequestParam(value = "limit", defaultValue = "12") String direction
+			@RequestParam(value = "direction", defaultValue = "asc") String direction
 			) {
 		
 		var sortDirection = "desc".contentEquals(direction)
@@ -202,7 +202,7 @@ public class PersonController {
 			@PathVariable(value = "firstName") String firstName,
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "12") Integer size,
-			@RequestParam(value = "limit", defaultValue = "12") String direction
+			@RequestParam(value = "direction", defaultValue = "asc") String direction
 			) {
 		
 		var sortDirection = "desc".contentEquals(direction)
