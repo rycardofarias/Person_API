@@ -50,4 +50,40 @@ public class FileController {
 				filename, fileDownloadUri, file.getContentType(), file.getSize());
 	}
 	
+	@PostMapping("/uploadMultipleFiles")
+	public List<UploadFileResponseVO> uploadMultipleFiles(
+		@RequestParam("files") MultipartFile[] files) {
+		logger.info("Storing files to disk");
+		
+		return Arrays.asList(files)
+			.stream()
+			.map(file -> uploadFile(file))
+			.collect(Collectors.toList());
+	}
+	
+	//MY_file.txt
+	@GetMapping("/downloadFile/{filename:.+}")
+	public ResponseEntity<Resource> downloadFile(
+		@PathVariable String filename, HttpServletRequest request) {
+		
+		logger.info("Reading a file on disk");
+		
+		Resource resource = service.loadFileAsResource(filename);
+		String contentType = "";
+		
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (Exception e) {
+			logger.info("Could not determine file type!");
+		}
+		
+		if (contentType.isBlank()) contentType = "application/octet-stream";
+		
+		return ResponseEntity.ok()
+			.contentType(MediaType.parseMediaType(contentType))
+			.header(
+				HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=\"" + resource.getFilename() + "\"")
+			.body(resource);
+	}
 }
