@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.config.FileStorageConfig;
+import com.example.demo.config.VarConstants;
 import com.example.demo.exceptions.FileStorageException;
 import com.example.demo.exceptions.MyFileNotFoundException;
 
@@ -22,12 +23,16 @@ public class FileStorageService {
 	private final Path fileStorageLocation;
 
 	@Autowired
-	public FileStorageService(FileStorageConfig fileStorageConfig) {
+	public FileStorageService() {
+		
+		FileStorageConfig fileStorageConfig = 
+				new FileStorageConfig(VarConstants.LOCAL_STORAGE_DIRECTORY);
+		
 		Path path = Paths.get(fileStorageConfig.getUploadDir())
 			.toAbsolutePath().normalize();
 		
 		this.fileStorageLocation = path;
-		
+			
 		try {
 			Files.createDirectories(this.fileStorageLocation);
 		} catch (Exception e) {
