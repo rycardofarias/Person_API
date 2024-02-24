@@ -17,7 +17,7 @@
 		<java.version>20</java.version>
 		<dozer.version>6.5.2</dozer.version>
 		<bind.version>2.3.0</bind.version>
-		<postgre.version>42.6.0</postgre.version>
+		<postgre.version>42.6.1</postgre.version>
 		<springdoc.version>2.0.2</springdoc.version>
 		<jwt.version>4.4.0</jwt.version>
 	</properties>
